@@ -4,6 +4,7 @@ import al.taghizadeh.csp.Assignment;
 import al.taghizadeh.csp.Variable;
 import al.taghizadeh.framework.Node;
 import al.taghizadeh.me.csp.Course;
+import al.taghizadeh.me.csp.Master;
 import al.taghizadeh.me.csp.RoomTimeSlot;
 import org.apache.log4j.Logger;
 
@@ -21,6 +22,11 @@ public class DistanceCalculator<VAR extends Variable, VAL, S extends Assignment<
         implements ToDoubleFunction<Node<S, A>> {
     private Logger logger = Logger.getLogger(DistanceCalculator.class);
     private Node<S, A> current = null;
+    private List<Master> masters;
+
+    public DistanceCalculator(List<Master> masters) {
+        this.masters = masters;
+    }
 
     @Override
     public double applyAsDouble(Node<S, A> value) {
@@ -55,7 +61,7 @@ public class DistanceCalculator<VAR extends Variable, VAL, S extends Assignment<
         return total;
     }
 
-    public double mastersCompactnessCost() {
+    private double mastersCompactnessCost() {
         double distance = 0;
         Map<String, List<Integer>> mastersToDays = new HashMap<>();
         for (VAR var : current.getState().getVariables()) {
@@ -69,29 +75,34 @@ public class DistanceCalculator<VAR extends Variable, VAL, S extends Assignment<
             }
         }
 
-        for (String key : mastersToDays.keySet()) {
-            List<Integer> days = mastersToDays.get(key);
-            if (days.size() > 2)
-                distance += 10;
-        }
-        return distance;
-    }
-
-    private double groupCompactnessDistance(){
-        double distance = 0;
-        for (VAR var : current.getState().getVariables()){
-
-        }
-        return distance;
-    }
-
-    private double lateHourDistance(){
-        double distance = 0;
-        for (VAR var : current.getState().getVariables()) {
-            RoomTimeSlot r =(RoomTimeSlot)current.getState().getValue(var);
-            if(r.getTimeSlot() == 5)
+        for (Master master : masters) {
+            List<Integer> days = mastersToDays.get(master.getName());
+            for (Integer day : days) {
+                if (!master.getPreferedDays().contains(day))
+                    distance += 5;
+            }
+            if (master.isCompress() && days.size() > 4)
                 distance += 5;
         }
-        return  distance;
+
+        return distance;
+    }
+
+    private double groupCompactnessDistance() {
+        double distance = 0;
+        for (VAR var : current.getState().getVariables()) {
+
+        }
+        return distance;
+    }
+
+    private double lateHourDistance() {
+        double distance = 0;
+        for (VAR var : current.getState().getVariables()) {
+            RoomTimeSlot r = (RoomTimeSlot) current.getState().getValue(var);
+            if (r.getTimeSlot() == 5)
+                distance += 5;
+        }
+        return distance;
     }
 }

@@ -14,7 +14,11 @@ import java.util.Map;
  */
 public class TimeTable extends CSP<Course, RoomTimeSlot> {
     static Logger logger = Logger.getLogger(TimeTable.class);
-    List<Master> masters = new ArrayList<>();
+    private List<Master> masters = new ArrayList<>();
+
+    public List<Master> getMasters() {
+        return masters;
+    }
 
     public TimeTable(List<Course> courses, List<RoomTimeSlot> values, List<RoomTimeSlot> vlsForOneLecture, Map<String, List<RoomTimeSlot>> eqToRTS, List<Master> masters) {
         this.masters = masters;

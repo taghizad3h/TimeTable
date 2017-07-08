@@ -87,10 +87,11 @@ public class InputParser {
                 m.setMasterId(sMaster[0]);
                 m.setName(sMaster[1]);
                 for (int j = 0; j < sMaster[2].length(); j++) {
-                    m.getPreferedDays().add(Integer.valueOf(sMaster[2].charAt(j)) - 1);
+                    m.getPreferedDays().add(sMaster[2].charAt(j) - 49);
                 }
                 if (sMaster[0].equalsIgnoreCase("1"))
                     m.setCompress(true);
+                masters.add(m);
             }
 
             logger.info("reading rooms info");

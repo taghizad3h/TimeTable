@@ -34,6 +34,7 @@ public class SATimeTableProblem<VAR extends Variable, VAL, S extends Assignment<
 
     @Override
     public List<A> getActions(S state) {
+        this.state = state;
         return getFeasibleActions();
     }
 
@@ -53,35 +54,20 @@ public class SATimeTableProblem<VAR extends Variable, VAL, S extends Assignment<
     }
 
     private List<A> getFeasibleActions() {
-        logger.info("finding feasable");
+        logger.info("finding a feasible neighbour");
         List<A> actions = new LinkedList<>();
         List<VAR> randomVars = new ArrayList<>();
-        VAR v = Util.selectRandomlyFromList(state.getVariables());
+        VAR v = Util.selectRandomlyFromList(this.state.getVariables());
         List<SwappingCourse> notConflicting = getNotConflictingSwapVals(v);
         while (notConflicting.size() == 0) {
-//            logger.info("no feasible trying again");
-            v = Util.selectRandomlyFromList(state.getVariables());
+            v = Util.selectRandomlyFromList(this.state.getVariables());
             notConflicting = getNotConflictingSwapVals(v);
         }
         for (SwappingCourse sc : notConflicting) {
             actions.add((A) new SwapTimeSlotAction(sc));
         }
-        System.out.println(state.getVariables().size());
         return actions;
     }
-
-    public Node<S, A> getRandomNeighbour(S state){
-        VAR v = Util.selectRandomlyFromList(state.getVariables());
-        List<SwappingCourse> notConflicting = getNotConflictingSwapVals(v);
-        while (notConflicting.size() == 0) {
-//            logger.info("no feasible trying again");
-            v = Util.selectRandomlyFromList(state.getVariables());
-            notConflicting = getNotConflictingSwapVals(v);
-        }
-
-        return new Node(new SwapTimeSlotAction<>(notConflicting.get(0)).doAction(state));
-    }
-
     /**
      * find the vars with which if we swap current var
      * no hard constraint will be violated.

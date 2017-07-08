@@ -32,7 +32,7 @@ public class Main {
             }
 
             SimulatedAnnealingSearch<Assignment, SwapTimeSlotAction<Course, RoomTimeSlot, Assignment<Course, RoomTimeSlot>>>
-                    sa = new SimulatedAnnealingSearch<>(new DistanceCalculator<>(), new Scheduler(), new MyNodeExpander<>());
+                    sa = new SimulatedAnnealingSearch<>(new DistanceCalculator<>(timeTable.getMasters()), new Scheduler(), new MyNodeExpander<>());
 
             Problem<Assignment, SwapTimeSlotAction<Course, RoomTimeSlot, Assignment<Course, RoomTimeSlot>>> problem1
                     = new SATimeTableProblem(assignment1, timeTable);
