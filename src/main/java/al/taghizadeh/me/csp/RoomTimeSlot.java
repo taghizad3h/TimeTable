@@ -7,16 +7,17 @@ public class RoomTimeSlot {
     private int day;
     private int timeSlot;
     private Room room;
-    TimeSlotType timeSlotType;
-    enum TimeSlotType{REGULAR, TWO_HOUR}
+    private RTSType type;
 
-    public TimeSlotType getTimeSlotType() {
-        return timeSlotType;
+    public RTSType getType() {
+        return type;
     }
 
-    public void setTimeSlotType(TimeSlotType timeSlotType) {
-        this.timeSlotType = timeSlotType;
+    public void setType(RTSType type) {
+        this.type = type;
     }
+
+    enum RTSType{ForOneLecture, ForTwoLecture}
 
     public int getDay() {
         return day;
@@ -47,23 +48,23 @@ public class RoomTimeSlot {
         if(!(obj instanceof RoomTimeSlot))
             return false;
         RoomTimeSlot other = (RoomTimeSlot)obj;
-
         return other.getDay() == this.getDay()
-                && other.getRoom() == this.getRoom()
+                && other.getRoom().equals(this.getRoom())
                 && other.getTimeSlot() == this.getTimeSlot()
-                && other.getTimeSlotType().equals(this.getTimeSlotType());
+                && other.getType().equals(this.getType());
     }
 
-
+    @Override
+    public int hashCode() {
+        int result = day;
+        result = 31 * result + timeSlot;
+        result = 31 * result + room.hashCode();
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        return result;
+    }
 
     @Override
     public String toString() {
         return "day:" + day + " timeslot:" + timeSlot + " room:" + room;
-    }
-
-    public boolean equalTime(RoomTimeSlot value) {
-        if(value == null)
-            return false;
-        return this.getDay() == value.getDay() && this.getTimeSlot() == value.getTimeSlot();
     }
 }

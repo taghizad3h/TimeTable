@@ -19,7 +19,7 @@ public class Scheduler {
 	public Scheduler() {
 		this.k = 20;
 		this.lam = 0.030;
-		this.limit = 30000;
+		this.limit = 2000;
 	}
 
 	public double getTemp(int t) {

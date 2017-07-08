@@ -41,4 +41,5 @@ public class MyNodeExpander<S extends Assignment, A extends SwapTimeSlotAction> 
         A action = Util.selectRandomlyFromList(expandActions(current, p));
         return new Node<>(p.getResult(current.getState(), action));
     }
+
 }

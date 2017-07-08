@@ -39,6 +39,14 @@ public class Room {
     }
 
     @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + capacity;
+        result = 31 * result + (equipmentId != null ? equipmentId.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "name: " + name + " capacity:" + capacity + " equipmentId:" + equipmentId;
     }

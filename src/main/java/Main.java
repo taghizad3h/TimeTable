@@ -25,6 +25,11 @@ public class Main {
                 = new CSPTimeTableSolver<Course, RoomTimeSlot>(1000000).solve(timeTable);
         if (assignment.isPresent()) {
             Assignment<Course, RoomTimeSlot> assignment1 = assignment.get();
+            logger.info("the answer found by csp:");
+            for (Course c : assignment1.getVariables()) {
+                RoomTimeSlot roomTimeSlot = assignment1.getValue(c);
+                logger.info(c + " " + roomTimeSlot);
+            }
 
             SimulatedAnnealingSearch<Assignment, SwapTimeSlotAction<Course, RoomTimeSlot, Assignment<Course, RoomTimeSlot>>>
                     sa = new SimulatedAnnealingSearch<>(new DistanceCalculator<>(), new Scheduler(), new MyNodeExpander<>());
@@ -34,8 +39,8 @@ public class Main {
             Optional x = sa.findState(problem1);
             if (x.isPresent()) {
                 Assignment<Course, RoomTimeSlot> assignment2 = (Assignment<Course, RoomTimeSlot>) x.get();
-                logger.info("found a time table");
-                for (Course c : assignment1.getVariables()) {
+                logger.info("found a time table " + assignment2.isComplete(assignment2.getVariables()));
+                for (Course c : assignment2.getVariables()) {
                     RoomTimeSlot roomTimeSlot = assignment1.getValue(c);
                     logger.info(c + " " + roomTimeSlot);
                 }

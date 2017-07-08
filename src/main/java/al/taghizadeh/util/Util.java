@@ -83,7 +83,8 @@ public class Util {
 	 * @return a randomly selected element from l.
 	 */
 	public static <T> T selectRandomlyFromList(List<T> l) {
-		return l.get(random.nextInt(l.size()));
+		T t= l.get(random.nextInt(l.size()));
+		return t;
 	}
 
 	public static <T> T selectRandomlyFromSet(Set<T> set) {

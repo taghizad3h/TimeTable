@@ -1,5 +1,7 @@
 package al.taghizadeh.csp;
 
+import com.google.common.collect.BiMap;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,33 +17,36 @@ public class Assignment<VAR extends Variable, VAL> implements Cloneable {
      * Maps variables to their assigned values.
      */
     private LinkedHashMap<VAR, VAL> variableToValueMap = new LinkedHashMap<>();
-    private LinkedHashMap<VAL,VAR> valueToVariableMap = new LinkedHashMap<>();
 
     public List<VAR> getVariables() {
         return new ArrayList<>(variableToValueMap.keySet());
-    }
-
-    public List<VAL> getValues(){
-        return new ArrayList<>(valueToVariableMap.keySet());
     }
 
     public VAL getValue(VAR var) {
         return variableToValueMap.get(var);
     }
 
-    public VAR getVariable(VAL val){
-        return valueToVariableMap.get(val);
+//    @SuppressWarnings("this method should be use afer setFeasible method called")
+    public VAR getVariable(VAL val) {
+//        if (variableToValueMap.containsValue(val))
+//            return ((BiMap<VAR, VAL>) variableToValueMap).inverse().get(val);
+        for (VAR var: variableToValueMap.keySet()) {
+            if(variableToValueMap.get(var).equals(val))
+                return var;
+        }
+        return null;
     }
 
     public void add(VAR var, VAL value) {
         assert value != null;
         variableToValueMap.put(var, value);
-        valueToVariableMap.put(value, var);
     }
 
     public void remove(VAR var) {
-        valueToVariableMap.remove(getValue(var));
-        variableToValueMap.remove(var);
+        if (variableToValueMap instanceof BiMap)
+            variableToValueMap.remove(var, getValue(var));
+        else
+            variableToValueMap.remove(var);
     }
 
     public boolean contains(VAR var) {
@@ -49,7 +54,8 @@ public class Assignment<VAR extends Variable, VAL> implements Cloneable {
     }
 
     public boolean containsVal(VAL val) {
-        return variableToValueMap.containsKey(val);
+//        return variableToValueMap.containsValue(val);
+        return constainsVal(val);
     }
 
     /**
@@ -89,7 +95,6 @@ public class Assignment<VAR extends Variable, VAL> implements Cloneable {
         try {
             result = (Assignment<VAR, VAL>) super.clone();
             result.variableToValueMap = new LinkedHashMap<>(variableToValueMap);
-            result.valueToVariableMap = new LinkedHashMap<>(valueToVariableMap);
         } catch (CloneNotSupportedException e) {
             throw new UnsupportedOperationException("Could not clone assignment."); // should never happen!
         }
@@ -108,5 +113,18 @@ public class Assignment<VAR extends Variable, VAL> implements Cloneable {
         }
         result.append("}");
         return result.toString();
+    }
+
+    public void setFeasible() {
+//        variableToValueMap = HashBiMap.create(variableToValueMap);
+    }
+
+    public boolean constainsVal(VAL val){
+        for (VAR var :
+                variableToValueMap.keySet()) {
+            if (variableToValueMap.get(var).equals(val))
+                return true;
+        }
+        return false;
     }
 }

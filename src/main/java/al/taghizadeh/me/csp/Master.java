@@ -1,45 +1,43 @@
 package al.taghizadeh.me.csp;
 
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ali Asghar on 02/07/2017.
  */
 
 public class Master {
-    private int masterId;
+    private String masterId;
     private String name;
-    private boolean busy;
-    private Set<Course> totalCourses = new HashSet<>();
-    private Set<Course> assignedCourses = new HashSet<>();
+    private boolean compress;
+    List<Integer> preferedDays = new ArrayList<>();
 
-    public Master(int masterId, String name, boolean busy) {
-        this.masterId = masterId;
-        this.name = name;
-        this.busy = busy;
+    public List<Integer> getPreferedDays() {
+        return preferedDays;
+    }
+
+    public void setPreferedDays(List<Integer> preferedDays) {
+        this.preferedDays = preferedDays;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Master && ((Master) obj).getMasterId() == this.getMasterId();
+        return obj instanceof Master && ((Master) obj).getMasterId().equals(this.getMasterId());
     }
 
     @Override
     public int hashCode() {
-        return getMasterId();
+        return masterId.hashCode();
     }
 
-    public int getWeight(){
-        return  totalCourses.size()/(totalCourses.size() - assignedCourses.size());
-    }
 
-    public int getMasterId() {
+    public String getMasterId() {
         return masterId;
     }
 
-    public void setMasterId(int masterId) {
+    public void setMasterId(String masterId) {
         this.masterId = masterId;
     }
 
@@ -51,27 +49,12 @@ public class Master {
         this.name = name;
     }
 
-    public boolean isBusy() {
-        return busy;
+    public boolean isCompress() {
+        return compress;
     }
 
-    public void setBusy(boolean busy) {
-        this.busy = busy;
+    public void setCompress(boolean compress) {
+        this.compress = compress;
     }
 
-    public Set<Course> getTotalCourses() {
-        return totalCourses;
-    }
-
-    public void setTotalCourses(Set<Course> totalCourses) {
-        this.totalCourses = totalCourses;
-    }
-
-    public Set<Course> getAssignedCourses() {
-        return assignedCourses;
-    }
-
-    public void setAssignedCourses(Set<Course> assignedCourses) {
-        this.assignedCourses = assignedCourses;
-    }
 }

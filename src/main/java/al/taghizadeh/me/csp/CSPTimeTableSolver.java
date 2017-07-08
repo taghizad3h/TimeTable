@@ -36,6 +36,7 @@ public class CSPTimeTableSolver<VAR extends Variable, VAL> extends CspSolver<VAR
         for (int i = 0; i < maxSteps && !Tasks.currIsCancelled(); i++) {
             if (current.isSolution(csp)) {
                 logger.info("ans answer found with distance " + function.applyAsDouble(current));
+                current.setFeasible();
                 return Optional.of(current);
             } else
                 {
