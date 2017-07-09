@@ -59,9 +59,13 @@ public class SATimeTableProblem<VAR extends Variable, VAL, S extends Assignment<
         List<VAR> randomVars = new ArrayList<>();
         VAR v = Util.selectRandomlyFromList(this.state.getVariables());
         List<SwappingCourse> notConflicting = getNotConflictingSwapVals(v);
-        while (notConflicting.size() == 0) {
+        int i = 0;
+        while (notConflicting.size() == 0 && i < 1000) {
             v = Util.selectRandomlyFromList(this.state.getVariables());
+
             notConflicting = getNotConflictingSwapVals(v);
+
+            i++;
         }
         for (SwappingCourse sc : notConflicting) {
             actions.add((A) new SwapTimeSlotAction(sc));
@@ -73,6 +77,7 @@ public class SATimeTableProblem<VAR extends Variable, VAL, S extends Assignment<
      * no hard constraint will be violated.
      */
     private List<SwappingCourse> getNotConflictingSwapVals(VAR var) {
+
         Course c = (Course) var;
         //check if this course has two lectures in a week or not
 //        logger.info("finding swap");
@@ -81,6 +86,7 @@ public class SATimeTableProblem<VAR extends Variable, VAL, S extends Assignment<
         } else {
             return getNotConflictingSwapValsBy1LectureClass(var);
         }
+
     }
 
     private List<SwappingCourse> getNotConflictingSwapValsBy1LectureClass(VAR var1) {
@@ -106,7 +112,6 @@ public class SATimeTableProblem<VAR extends Variable, VAL, S extends Assignment<
                     assignment.add(var1, val1);
                 } else {
                     VAR var2 = assignment.getVariable(val2);
-                    constraints.addAll(csp.getConstraints(var2));
                     assignment.remove(var2);
                     assignment.remove(var1);
                     assignment.add(var1, val2);
@@ -131,6 +136,7 @@ public class SATimeTableProblem<VAR extends Variable, VAL, S extends Assignment<
     }
 
     private List<SwappingCourse> getNotConflictingSwapVarsBy2LectureClass(VAR var1_1) {
+
         List<SwappingCourse> swappingCourses = new LinkedList<>();
         List<Constraint<VAR, VAL>> constraints = csp.getConstraints();
         Domain<VAL> domain = csp.getDomain(var1_1);
@@ -251,6 +257,7 @@ public class SATimeTableProblem<VAR extends Variable, VAL, S extends Assignment<
             }
         }
         assignment = null;
+
         return swappingCourses;
     }
 

@@ -100,8 +100,10 @@ public class DistanceCalculator<VAR extends Variable, VAL, S extends Assignment<
         double distance = 0;
         for (VAR var : current.getState().getVariables()) {
             RoomTimeSlot r = (RoomTimeSlot) current.getState().getValue(var);
-            if (r.getTimeSlot() == 5)
-                distance += 5;
+            if (r.getTimeSlot() == 4)
+                distance += 2;
+            if(r.getTimeSlot() == 0)
+                distance += 2;
         }
         return distance;
     }
