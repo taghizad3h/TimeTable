@@ -37,6 +37,8 @@ public class Main {
                 logger.info(c + " " + roomTimeSlot);
             }
 
+            makeHtml(assignment1, "csp.html");
+
             SimulatedAnnealingSearch<Assignment, SwapTimeSlotAction<Course, RoomTimeSlot, Assignment<Course, RoomTimeSlot>>>
                     sa = new SimulatedAnnealingSearch<>(new DistanceCalculator<>(timeTable.getMasters()), new Scheduler(), new MyNodeExpander<>());
 
@@ -66,7 +68,7 @@ public class Main {
     public static void makeHtml(Assignment<Course, RoomTimeSlot> assignment, String name) throws IOException {
         String input = null;
         try {
-            input = (IOUtils.toString(new FileInputStream("TimeTable.html"), "UTF-8"));
+            input = (IOUtils.toString(new FileInputStream("TimeTable1.html"), "UTF-8"));
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -74,6 +76,7 @@ public class Main {
         Element body = doc.body();
 
         String header = "<tr>" +
+                "<th>گروه</th>"+
                 "<th>شماره کلاس</th>" +
                 "<th>نام استاد</th>" +
                 "<th>نام درس</th>" +
@@ -88,23 +91,73 @@ public class Main {
                 int j = 0;
                 for (Course c : assignment.getVariables()) {
                     RoomTimeSlot r = assignment.getValue(c);
-                    if (r.getDay() == k && r.getTimeSlot() == i) {
+                    if (r.getDay() == k && r.getTimeSlot() == i && r.getType() != RoomTimeSlot.RTSType.ForOneLecture) {
+                        String courseName = c.getName().replaceAll("\\d", "").replaceAll("-", "");
                         htm.append("<tr style=\"width:150px\">")
+                                .append("<td>").append(c.getGroupId()).append("</td>")
                                 .append("<td>").append(r.getRoom().getName()).append("</td>")
                                 .append("<td>").append(c.getMasterId()).append("</td>")
-                                .append("<td>").append(c.getName()).append("</td>")
+                                .append("<td>").append(courseName).append("</td>")
                                 .append("<td>").append(j++).append("</td>")
                                 .append("</tr>");
+                        j++;
                     }
-                    j++;
+
                 }
                 htm.append("</td> </table>");
             }
+            htm.append("<th class=\"rotate\" scope=\"row\"><div>").append(getDay(k)).append("</div></th>");
             el.html(htm.toString());
         }
 
-        IOUtils.write(doc.outerHtml().getBytes(), new FileOutputStream(name + ".html"));
+        IOUtils.write(doc.outerHtml().getBytes(), new FileOutputStream(name + "1.html"));
 
+        input = IOUtils.toString(new FileInputStream("TimeTable2.html"), "UTF-8");
+        doc = Jsoup.parse(input);
+        body = doc.body();
+
+
+        for (int k = 0; k < 5; k++) {//days
+            StringBuilder htm = new StringBuilder();
+            Element el = body.select("#" + k + "shanbeh").get(0);
+            for (int i = 4; i >= 0; i--) {//time slots
+                htm.append("<td class=\"innerCell\" style=\"vertical-align:top\"> <table class=\"innerTable\"> ").append(header);
+                int j = 0;
+                for (Course c : assignment.getVariables()) {
+                    RoomTimeSlot r = assignment.getValue(c);
+                    if (r.getDay() == k && r.getTimeSlot() == i && r.getType() == RoomTimeSlot.RTSType.ForOneLecture) {
+                        String courseName = c.getName().replaceAll("\\d", "").replaceAll("-", "");
+                        htm.append("<tr style=\"width:150px\">")
+                                .append("<td>").append(c.getGroupId()).append("</td>")
+                                .append("<td>").append(r.getRoom().getName()).append("</td>")
+                                .append("<td>").append(c.getMasterId()).append("</td>")
+                                .append("<td>").append(courseName).append("</td>")
+                                .append("<td>").append(j++).append("</td>")
+                                .append("</tr>");
+                        j++;
+                    }
+
+                }
+                htm.append("</td> </table>");
+            }
+            htm.append("<th class=\"rotate\" scope=\"row\"><div>").append(getDay(k)).append("</div></th>");
+            el.html(htm.toString());
+        }
+
+        IOUtils.write(doc.outerHtml().getBytes(), new FileOutputStream(name + "2.html"));
+        System.out.println("helloe");
+    }
+
+    private static String getDay(int i){
+        switch (i){
+            case 0: return "شنبه";
+            case 1: return "یکشنبه";
+            case 2: return "دوشنبه";
+            case 3: return "سه شنبه";
+            case 4: return "چهار شنبه";
+            case 5: return "شنبه";
+        }
+        return null;
     }
 
 

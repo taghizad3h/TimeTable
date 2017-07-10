@@ -18,8 +18,8 @@ public class Scheduler {
 
 	public Scheduler() {
 		this.k = 20;
-		this.lam = 0.045;
-		this.limit = 10000;
+		this.lam = 0.040;
+		this.limit = 100000;
 	}
 
 	public double getTemp(int t) {

@@ -156,7 +156,7 @@ public class SATimeTableProblem<VAR extends Variable, VAL, S extends Assignment<
             VAL val2_1 = Util.selectRandomlyFromList(domain.asList());
             if (!assignment.containsVal(val2_1)) {//first val not occupied
                 VAL val2_2 = Util.selectRandomlyFromList(getDomainForTimeSlot(var1_2, val2_1));
-                if (val2_2 != null)
+                if (val2_2 != null && val2_2 != val2_1)
                     if (!assignment.containsVal(val2_2)) {//first val not occupied, second val not occupied
                         assignment.remove(var1_1);
                         assignment.remove(var1_2);
@@ -200,7 +200,7 @@ public class SATimeTableProblem<VAR extends Variable, VAL, S extends Assignment<
                     }
             } else {//first var occupied
                 VAL val2_2 = Util.selectRandomlyFromList(getDomainForTimeSlot(var1_2, val2_1));
-                if (val2_2 != null)
+                if (val2_2 != null && val2_2 != val2_1)
                     if (!assignment.containsVal(val2_2)) {//first val occupied, second val not occupied
                         VAR var2_1 = assignment.getVariable(val1_2);
                         assignment.remove(var1_1);

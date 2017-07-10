@@ -79,10 +79,10 @@ public class DistanceCalculator<VAR extends Variable, VAL, S extends Assignment<
             List<Integer> days = mastersToDays.get(master.getName());
             for (Integer day : days) {
                 if (!master.getPreferedDays().contains(day))
-                    distance += 5;
+                    distance += 10;
             }
             if (master.isCompress() && days.size() > 4)
-                distance += 5;
+                distance += 15;
         }
 
         return distance;
@@ -102,8 +102,8 @@ public class DistanceCalculator<VAR extends Variable, VAL, S extends Assignment<
             RoomTimeSlot r = (RoomTimeSlot) current.getState().getValue(var);
             if (r.getTimeSlot() == 4)
                 distance += 2;
-            if(r.getTimeSlot() == 0)
-                distance += 2;
+//            if(r.getTimeSlot() == 0)
+//                distance += 0.5;
         }
         return distance;
     }

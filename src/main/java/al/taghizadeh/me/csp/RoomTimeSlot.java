@@ -17,7 +17,7 @@ public class RoomTimeSlot {
         this.type = type;
     }
 
-    enum RTSType{ForOneLecture, ForTwoLecture}
+    public enum RTSType{ForOneLecture, ForTwoLecture}
 
     public int getDay() {
         return day;

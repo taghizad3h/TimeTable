@@ -66,11 +66,11 @@ public class ArcConstraint<VAR extends Variable, VAL> implements Constraint<VAR,
                 twoLecture = value2.getTimeSlot();
                 oneLecture = value1.getTimeSlot();
             }
-            if (twoLecture == 1 && oneLecture == 1
+            if (twoLecture == 0 && oneLecture == 0
+                    || twoLecture == 1 && oneLecture == 0
                     || twoLecture == 2 && oneLecture == 1
                     || twoLecture == 3 && oneLecture == 2
-                    || twoLecture == 4 && oneLecture == 3
-                    || twoLecture == 5 && oneLecture == 4)
+                    || twoLecture == 4 && oneLecture == 3)
                 return true;
         }
         return false;
