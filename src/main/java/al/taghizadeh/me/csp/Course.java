@@ -14,7 +14,7 @@ public class Course extends Variable {
     private RoomTimeSlot roomTimeSlots;
     private String equipmentId;
     private CourseType courseType;
-    enum CourseType{ONE_LECTURE, TWO_LECTURE};
+    public enum CourseType{ONE_LECTURE, TWO_LECTURE};
 
     public String getEquipmentId() {
         return equipmentId;
